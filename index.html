@@ -1,0 +1,515 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Guide Complet : Geometry Nodes Blender 4.5 pour Video Mapping</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            margin-top: 20px;
+            margin-bottom: 20px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+        }
+        
+        .header {
+            text-align: center;
+            margin-bottom: 40px;
+            padding: 40px 0;
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            border-radius: 15px;
+            color: white;
+        }
+        
+        .header h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+        }
+        
+        .header p {
+            font-size: 1.2em;
+            opacity: 0.9;
+        }
+        
+        .nav {
+            background: #2c3e50;
+            padding: 15px;
+            border-radius: 10px;
+            margin-bottom: 30px;
+            position: sticky;
+            top: 20px;
+            z-index: 100;
+        }
+        
+        .nav ul {
+            list-style: none;
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 20px;
+        }
+        
+        .nav a {
+            color: #ecf0f1;
+            text-decoration: none;
+            padding: 8px 15px;
+            border-radius: 5px;
+            transition: all 0.3s;
+            font-weight: 500;
+        }
+        
+        .nav a:hover {
+            background: #3498db;
+            transform: translateY(-2px);
+        }
+        
+        .content {
+            background: white;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
+        }
+        
+        h2 {
+            color: #2c3e50;
+            font-size: 2em;
+            margin: 40px 0 20px 0;
+            padding-bottom: 10px;
+            border-bottom: 3px solid #3498db;
+        }
+        
+        h3 {
+            color: #34495e;
+            font-size: 1.5em;
+            margin: 30px 0 15px 0;
+            padding-left: 15px;
+            border-left: 4px solid #e74c3c;
+        }
+        
+        h4 {
+            color: #2980b9;
+            font-size: 1.2em;
+            margin: 20px 0 10px 0;
+        }
+        
+        p {
+            margin-bottom: 15px;
+            text-align: justify;
+        }
+        
+        .highlight {
+            background: linear-gradient(120deg, #a8edea 0%, #fed6e3 100%);
+            padding: 20px;
+            border-radius: 10px;
+            margin: 20px 0;
+            border-left: 5px solid #3498db;
+        }
+        
+        .warning {
+            background: linear-gradient(120deg, #ffeaa7 0%, #fab1a0 100%);
+            padding: 15px;
+            border-radius: 8px;
+            margin: 15px 0;
+            border-left: 5px solid #e17055;
+        }
+        
+        .resource-box {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 20px;
+            border-radius: 12px;
+            margin: 20px 0;
+        }
+        
+        .resource-box h4 {
+            color: white;
+            margin-bottom: 15px;
+        }
+        
+        .resource-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            margin: 20px 0;
+        }
+        
+        .resource-card {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s;
+        }
+        
+        .resource-card:hover {
+            transform: translateY(-5px);
+        }
+        
+        .resource-card h5 {
+            color: #2c3e50;
+            margin-bottom: 10px;
+        }
+        
+        .glossary {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 10px;
+            margin: 20px 0;
+        }
+        
+        .glossary-term {
+            margin-bottom: 15px;
+            padding: 10px;
+            background: white;
+            border-radius: 5px;
+            border-left: 3px solid #3498db;
+        }
+        
+        .term-en {
+            font-weight: bold;
+            color: #2980b9;
+        }
+        
+        .term-fr {
+            color: #27ae60;
+            font-style: italic;
+        }
+        
+        .footer {
+            text-align: center;
+            margin-top: 50px;
+            padding: 30px;
+            background: #2c3e50;
+            color: white;
+            border-radius: 15px;
+        }
+        
+        .back-to-top {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            background: #3498db;
+            color: white;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-decoration: none;
+            font-size: 20px;
+            transition: all 0.3s;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        }
+        
+        .back-to-top:hover {
+            background: #2980b9;
+            transform: translateY(-3px);
+        }
+        
+        @media (max-width: 768px) {
+            .container {
+                margin: 10px;
+                padding: 15px;
+            }
+            
+            .header h1 {
+                font-size: 2em;
+            }
+            
+            .nav ul {
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            .content {
+                padding: 20px;
+            }
+        }
+        
+        .code-term {
+            background: #2c3e50;
+            color: #ecf0f1;
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9em;
+        }
+        
+        .section {
+            margin-bottom: 50px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header class="header">
+            <h1>Guide Complet : Geometry Nodes Blender 4.5</h1>
+            <p>Spécialisé Video Mapping - Ressources Francophones & Terminologie Anglaise</p>
+        </header>
+
+        <nav class="nav">
+            <ul>
+                <li><a href="#introduction">Introduction</a></li>
+                <li><a href="#fondamentaux">Fondamentaux</a></li>
+                <li><a href="#ressources">Ressources</a></li>
+                <li><a href="#workflow">Workflow</a></li>
+                <li><a href="#techniques">Techniques</a></li>
+                <li><a href="#optimisation">Optimisation</a></li>
+                <li><a href="#glossaire">Glossaire</a></li>
+            </ul>
+        </nav>
+
+        <div class="content">
+            <section id="introduction" class="section">
+                <div class="highlight">
+                    <p><strong>Les Geometry Nodes de Blender 4.5 révolutionnent la création de contenus visuels pour le video mapping</strong>, offrant une approche procédurale puissante pour générer des animations adaptées aux surfaces de projection complexes. Ce guide spécialisé vous accompagne dans l'apprentissage de cette technologie avec une approche mixte (vidéo + documentation) privilégiant les ressources francophones tout en maîtrisant la terminologie technique anglaise nécessaire.</p>
+                </div>
+
+                <p><strong>Mykol</strong> reste la référence française incontournable pour débuter, tandis que les formations <strong>Tuto.com</strong> proposent des ateliers pratiques parfaitement adaptés au niveau intermédiaire. Les nouveautés de Blender 4.5 apportent des <strong>performances considérablement améliorées</strong> (jusqu'à 100x plus rapide pour certains nœuds) et de nouveaux outils spécialement utiles pour le video mapping comme le <span class="code-term">Set Mesh Normal Node</span> et les nœuds d'import directs.</p>
+            </section>
+
+            <section id="fondamentaux" class="section">
+                <h2>Concepts fondamentaux des Geometry Nodes dans Blender 4.5</h2>
+                
+                <p>Les <strong>Geometry Nodes</strong> (nœuds géométriques) transforment Blender en un système de modélisation procédurale non-destructive. Dans le contexte du video mapping, ils permettent de créer des géométries parfaitement adaptées aux surfaces de projection et des animations dynamiques synchronisées avec les performances.</p>
+
+                <h3>Nouveautés essentielles de Blender 4.5</h3>
+                
+                <div class="warning">
+                    <strong>Performance dramatiquement améliorée</strong> constitue la révolution majeure. Le <span class="code-term">Triangulate Node</span> (nœud de triangulation) est désormais 30 à 100 fois plus rapide, tandis que le <span class="code-term">Sort Elements Node</span> (nœud de tri des éléments) gagne 50% de performance.
+                </div>
+
+                <p>Le nouveau <span class="code-term">Set Mesh Normal Node</span> (nœud de définition des normales de maillage) permet des <strong>transitions fluides entre meshes</strong>, essentiel pour créer des surfaces de projection continues sur des architectures complexes. Les <strong>nœuds d'import</strong> (PLY, OBJ, CSV, STL, Text, VDB) acceptent maintenant le <strong>glisser-déposer direct</strong>, simplifiant l'intégration d'éléments externes.</p>
+
+                <h3>Terminologie technique essentielle</h3>
+                
+                <div class="glossary">
+                    <div class="glossary-term">
+                        <span class="term-en">Node Tree</span> → <span class="term-fr">Arbre de nœuds</span> : structure de traitement des données géométriques
+                    </div>
+                    <div class="glossary-term">
+                        <span class="term-en">Socket</span> → <span class="term-fr">Connecteur</span> : codé par couleur (jaune=géométrie, bleu=vecteurs, gris=valeurs numériques)
+                    </div>
+                    <div class="glossary-term">
+                        <span class="term-en">Field</span> → <span class="term-fr">Champ</span> : données évaluées pour chaque élément géométrique individuellement
+                    </div>
+                </div>
+            </section>
+
+            <section id="ressources" class="section">
+                <h2>Ressources d'apprentissage avec liens directs</h2>
+
+                <div class="resource-list">
+                    <div class="resource-card">
+                        <h5>🎥 Chaînes YouTube françaises de référence</h5>
+                        <p><strong><a href="https://www.youtube.com/@Mykol" target="_blank">Mykol</a></strong> - Référence unanime pour Blender français. Formation complète Geometry Nodes avec explications claires et approche pédagogique structurée.</p>
+                        <p><strong>Alex_3D</strong> - Tutoriels techniques spécialisés, excellent complément pour techniques avancées.</p>
+                        <p><strong>Melting Prod</strong> - Approche créative des Geometry Nodes avec projets artistiques.</p>
+                        <p>📋 <em>Source : <a href="https://miary.dev/2022/11/27/meilleures-chaines-youtube-en-francais-pour-apprendre-blender-en-2022-2023/" target="_blank">Guide des meilleures chaînes Blender françaises</a></em></p>
+                    </div>
+                    
+                    <div class="resource-card">
+                        <h5>📚 Formations Tuto.com spécialisées</h5>
+                        <p><strong><a href="https://fr.tuto.com/blender/tuto-geometry-nodes,198851.html" target="_blank">"Blender 4.X - Geometry Nodes - Atelier 01"</a></strong> - Bonhomme de neige procédural (3h), gestion menus, primitives <span class="code-term">MESH</span>, transformations, rendu <span class="code-term">Cycles</span>.</p>
+                        <p><strong><a href="https://fr.tuto.com/blender/tuto-geometry-nodes-debutant,205021.html" target="_blank">"Geometry Nodes - Débutants"</a></strong> - Sabre laser complet avec interface, texturiage, <span class="code-term">EEVEE</span>/<span class="code-term">Cycles</span>, compositing.</p>
+                    </div>
+                    
+                    <div class="resource-card">
+                        <h5>🌐 Documentation française complète</h5>
+                        <p><strong><a href="https://blendamator.com/comprendre-les-geometry-nodes-dans-blender/" target="_blank">Blendamator.com</a></strong> - Guide complet concepts fondamentaux avec exemples visuels : générateurs de ville, mobilier procédural, systèmes d'arbres.</p>
+                        <p><strong><a href="https://rodicq.art/2021/01/25/blender-3d-nodes-editor-la-base/" target="_blank">Rodicq Art</a></strong> - Node Editor expliqué en détail, parfait pour comprendre les bases.</p>
+                    </div>
+                </div>
+
+                <h3>📖 Documentation officielle Blender 4.5</h3>
+                <div class="resource-box">
+                    <h4>Sources techniques officielles</h4>
+                    <ul style="color: white; margin-left: 20px;">
+                        <li><a href="https://developer.blender.org/docs/release_notes/4.5/geometry_nodes/" target="_blank" style="color: #a8edea;">Notes de version Geometry Nodes 4.5</a> - Toutes les nouveautés techniques</li>
+                        <li><a href="https://docs.blender.org/manual/en/latest/modeling/geometry_nodes/index.html" target="_blank" style="color: #a8edea;">Manuel officiel Geometry Nodes</a> - Documentation complète</li>
+                        <li><a href="https://code.blender.org/2024/11/geometry-nodes-workshop-october-2024/" target="_blank" style="color: #a8edea;">Workshop Geometry Nodes 2024</a> - Développements futurs</li>
+                    </ul>
+                </div>
+
+                <h3>🎯 Formations internationales recommandées</h3>
+                <div class="resource-list">
+                    <div class="resource-card">
+                        <h5>🏆 Blender Studio (Officiel)</h5>
+                        <p><strong><a href="https://studio.blender.org/training/geometry-nodes-from-scratch/" target="_blank">Geometry Nodes from Scratch</a></strong> - Par Simon Thommes, membre officiel équipe Geometry Nodes. Formation de référence avec bibliothèque d'assets.</p>
+                    </div>
+                    
+                    <div class="resource-card">
+                        <h5>💎 Formations spécialisées</h5>
+                        <p><strong><a href="https://cgcookie.com/courses/intro-to-motion-graphics-blender-course" target="_blank">CG Cookie - Motion Graphics</a></strong> - Par Ducky 3D, excellent pour applications video mapping.</p>
+                        <p><strong><a href="https://www.schoolofmotion.com/blog/quick-easy-looping-animation-blender-geometry-nodes" target="_blank">School of Motion</a></strong> - Animations en boucle avec Geometry Nodes.</p>
+                    </div>
+                </div>
+
+                <h3>🔧 Outils et ressources complémentaires</h3>
+                <div class="resource-box">
+                    <h4>Glossaires et aide-mémoires</h4>
+                    <ul style="color: white; margin-left: 20px;">
+                        <li><a href="https://blenderglossary.com/the-secret-language-of-geometry-nodes-terminology-simplified/" target="_blank" style="color: #a8edea;">Glossaire Geometry Nodes simplifié</a></li>
+                        <li><a href="https://cgcookie.com/downloads/geometry-nodes-cheat-sheet" target="_blank" style="color: #a8edea;">Cheat Sheet CG Cookie</a> - Aide-mémoire PDF gratuit</li>
+                    </ul>
+                </div>
+            </section>
+
+            <section id="workflow" class="section">
+                <h2>Workflow spécialisé pour le video mapping</h2>
+
+                <h3>Calibration et préparation de scène</h3>
+                
+                <p>Le workflow commence par la <strong>camera calibration</strong> (calibration caméra) pour aligner précisément la vue virtuelle avec la position du projecteur. <strong><a href="https://fspy.io/" target="_blank">fSpy</a></strong> reste l'outil de référence :</p>
+                
+                <ol>
+                    <li>Importez une image de référence</li>
+                    <li>Alignez les axes avec les lignes de perspective réelles</li>
+                    <li>Définissez 2-3 points de fuite selon la complexité</li>
+                    <li>Exportez le fichier .fspy</li>
+                </ol>
+
+                <div class="resource-box">
+                    <h4>📹 Tutoriels video mapping pratiques</h4>
+                    <ul style="color: white; margin-left: 20px;">
+                        <li><a href="https://www.oneminutevideotutorials.com/2021/09/13/how-to-do-3d-projection-mapping-with-blender/" target="_blank" style="color: #a8edea;">Projection mapping 3D avec Blender</a> - Tutoriel complet avec fSpy</li>
+                        <li><a href="https://blendergrid.com/learn/articles/blender-projection-mapping-glow-festival" target="_blank" style="color: #a8edea;">Projection sur bâtiment - GLOW Festival</a> - Cas d'étude professionnel</li>
+                        <li><a href="https://conference.blender.org/2022/presentations/1396/" target="_blank" style="color: #a8edea;">Video mapping pour opéras en plein air</a> - Blender Conference 2022</li>
+                    </ul>
+                </div>
+
+                <h3>Techniques Geometry Nodes pour surfaces de projection</h3>
+                
+                <div class="highlight">
+                    <p><span class="code-term">Raycast Node</span> (nœud de lancer de rayon) constitue l'outil fundamental pour la projection perspective. Configurez le <span class="code-term">Target</span> (cible) comme plan de projection, <span class="code-term">Hit</span> (impact) comme objet à aplatir, et <span class="code-term">Ray Direction</span> (direction du rayon) comme différence entre caméra et chaque point.</p>
+                </div>
+
+                <p><span class="code-term">Project Point Node</span> (nœud de projection de point) gère les transformations de perspective complexes avec matrices de projection automatisées. La configuration type combine <span class="code-term">Geometry</span> → <span class="code-term">Raycast</span> → <span class="code-term">Transform Geometry</span> → <span class="code-term">Material Output</span>.</p>
+
+                <div class="warning">
+                    <strong>💡 Astuce avancée :</strong> Consultez <a href="https://blender.stackexchange.com/questions/294291/use-geometry-nodes-to-reproject-onto-camera-view" target="_blank">cette discussion Blender Stack Exchange</a> pour des techniques de reprojection avancées avec Geometry Nodes.
+                </div>
+            </section>
+
+            <section id="techniques" class="section">
+                <h2>Techniques avancées pour animations procédurales</h2>
+
+                <h3>Animation basée sur les champs</h3>
+                
+                <p>Utilisez <span class="code-term">Position Node</span> (nœud position) pour obtenir les coordonnées spatiales de chaque élément. <span class="code-term">Float Curve</span> (courbe flottante) contrôle l'évolution temporelle avec une animation 0-1. <span class="code-term">Map Range</span> (plage de correspondance) normalise les valeurs pour des transitions fluides.</p>
+
+                <h3>Intégration avec les outils de video mapping</h3>
+                
+                <div class="resource-box">
+                    <h4>Pipeline vers MadMapper</h4>
+                    <p><strong><a href="https://madmapper.com/" target="_blank">MadMapper</a></strong> utilise exclusivement géométrie et <strong>UVs</strong>, ignorant les fichiers <strong>MTL</strong>. La triangulation automatique est recommandée. Le <strong>triplanar mapping</strong> (v4+) fonctionne sans UV pour les géométries simples.</p>
+                    <p><em>Workflow complet : Blender export OBJ → rendu animation MP4 → MadMapper import 3D model → texture appliquée sur UV map → calibration physique</em></p>
+                </div>
+                
+                <div class="resource-box">
+                    <h4>Pipeline vers TouchDesigner</h4>
+                    <p><strong><a href="https://derivative.ca/" target="_blank">TouchDesigner</a></strong> : Support FBX avec transforms, optimisation texture resolution. Outils spécialisés : <strong>CamSchnappr</strong>, <strong>Kantan Mapper</strong>, <strong>Stoner</strong>.</p>
+                    <p>📋 <em>Guide détaillé : <a href="https://forum.derivative.ca/t/projection-mapping-pre-animated-content/5870" target="_blank">Projection mapping pour contenu pré-animé</a></em></p>
+                </div>
+                
+                <div class="resource-box">
+                    <h4>Pipeline vers Resolume</h4>
+                    <p><strong><a href="https://resolume.com/" target="_blank">Resolume Arena</a></strong> : Format <strong><a href="https://hap.video/" target="_blank">HAP</a></strong> pour décodage GPU, <strong>DXV</strong> pour performance optimale. Support patch-based vs géométrie complète.</p>
+                    <p>🔧 <em>Optimisation : <a href="https://resolume.com/forum/viewtopic.php?t=22893" target="_blank">Workflow 12K/16K pour projection mapping</a></em></p>
+                </div>
+                
+                <div class="resource-box">
+                    <h4>Configuration formats optimaux</h4>
+                    <p><strong>Qualité optimale</strong> : Container MP4, Codec H.264/H.265, Bitrate 10-20k kbps (1080p) ou 35-50k kbps (4K), 30-60 fps selon le mouvement.</p>
+                    <p><strong>Performance temps réel</strong> : Format <strong>HAP</strong> (décompression GPU), <strong>ProRes</strong> (qualité pro), séquences <strong>PNG/EXR</strong> (flexibilité maximale).</p>
+                </div>
+            </section>
+
+            <section id="optimisation" class="section">
+                <h2>Optimisation des performances</h2>
+
+                <h3>Techniques de base</h3>
+                
+                <div class="warning">
+                    Évitez les <span class="code-term">Boolean Nodes</span> (extrêmement lents) et les <span class="code-term">Raycast Nodes</span> en viewport. Utilisez <span class="code-term">Switch Node</span> avec <span class="code-term">Is Viewport</span> pour désactiver les calculs complexes pendant la navigation.
+                    <br><br>
+                    📚 <em>Lecture recommandée : <a href="https://blender.stackexchange.com/questions/256580/geonode-optimization-and-boolean-operations" target="_blank">Optimisation Geometry Nodes et opérations booléennes</a></em>
+                </div>
+
+                <p>Activez <span class="code-term">"As Instance"</span> dans <span class="code-term">Object Info node</span> pour optimiser l'affichage viewport. Le <strong>backend Vulkan</strong> (Preferences → System) améliore significativement les performances générales.</p>
+
+                <h3>Système LOD automatique</h3>
+                
+                <p>Implémentez <strong>Level of Detail</strong> avec : <span class="code-term">Distance to Camera</span> → <span class="code-term">Map Range</span> → <span class="code-term">Mix/Switch</span> entre versions haute/moyenne/basse résolution.</p>
+                
+                <div class="resource-box">
+                    <h4>🚀 Ressources d'optimisation avancée</h4>
+                    <ul style="color: white; margin-left: 20px;">
+                        <li><a href="https://blender.stackexchange.com/questions/260973/automatic-lod-level-of-detail-system-in-blender" target="_blank" style="color: #a8edea;">Système LOD automatique</a> - Techniques avancées</li>
+                        <li><a href="https://vagon.io/blog/complete-guide-for-reducing-rendering-times-at-blender" target="_blank" style="color: #a8edea;">Guide complet réduction temps rendu</a> - Optimisations hardware</li>
+                        <li><a href="https://developer.blender.org/T92862" target="_blank" style="color: #a8edea;">Performance viewport instances</a> - Rapport technique officiel</li>
+                    </ul>
+                </div>
+
+                <h3>Hardware et configuration</h3>
+                
+                <div class="highlight">
+                    <p><strong>Configuration recommandée :</strong></p>
+                    <ul>
+                        <li><strong>GPU :</strong> 8GB VRAM minimum (RTX 4060 Ti ou équivalent)</li>
+                        <li><strong>CPU :</strong> 8+ cores (Ryzen 7 / Intel i7)</li>
+                        <li><strong>RAM :</strong> 32GB pour projets 4K</li>
+                        <li><strong>Stockage :</strong> SSD pour assets et cache</li>
+                    </ul>
+                </div>
+            </section>
+
+            <section id="glossaire" class="section">
+                <h2>Glossaire technique français-anglais</h2>
+                
+                <div class="glossary">
+                    <div class="glossary-term">
+                        <span class="term-en">Attribute Domain</span> → <span class="term-fr">Domaine d'Attribut</span> : Niveau géométrique de stockage des données (Point, Edge, Face, Corner)
+                    </div>
+                    <div class="glossary-term">
+                        <span class="term-en">Data Type</span> → <span class="term-fr">Type de Données</span> : Classification des connexions (Float, Integer, Vector, Color, Boolean, String)
+                    </div>
+                    <div class="glossary-term">
+                        <span class="term-en">Field Input</span> → <span class="term-fr">Entrée de Champ</span> : Paramètre acceptant des valeurs variables par élément
+                    </div>
+                    <div class="glossary-term">
+                        <span class="term-en">Instance Collection</span> → <span class="term-fr">Collection d'Instances</span> : Ensemble d'objets référencés pour instanciation massive
+                    </div>
+                    <div class="glossary-term">
+                        <span class="term-en">Procedural Workflow</span> → <span class="term-fr">Flux Procédural</span> : Méthode non-destructive avec modifications paramétriques
+                    </div>
+                    <div class="glossary-term">
+                        <span class="term-en">Viewport Performance</span> → <span class="term-fr">Performance Fenêtre</span> : Optimisation temps réel avec simplification et mise en cache
+                    </div>
+                </div>
+            </section>
+        </div>
+
+        <footer class="footer">
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
